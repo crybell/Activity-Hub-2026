@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Juneteenth Trivia Challenge</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <main id="main-content" class="site-shell">
+      <section id="welcome-screen" class="screen panel" aria-labelledby="welcome-title">
+        <p class="eyebrow">Juneteenth 2026</p>
+        <h1 id="welcome-title">Juneteenth Trivia Challenge</h1>
+        <p class="lead">
+          Welcome to Juneteenth Trivia! Here you can have fun while learning more
+          about the historic holiday and other random facts about cars, music,
+          sports, and more!
+        </p>
+
+        <section class="info-card did-you-know" aria-labelledby="did-you-know-title">
+          <h2 id="did-you-know-title">Did you know?</h2>
+          <p>
+            Juneteenth (short for “June Nineteenth”) marks the day when federal
+            troops arrived in Galveston, Texas in 1865 to formally inform enslaved
+            people that the Emancipation Proclamation had legally freed them two and
+            a half years earlier. Juneteenth honors independence for African
+            Americans. On June 17, 2021, it officially became a federal holiday.
+          </p>
+        </section>
+
+        <button id="start-game" class="button button-primary">Start trivia</button>
+      </section>
+
+      <section
+        id="game-screen"
+        class="screen panel"
+        aria-labelledby="game-title"
+        hidden
+      >
+        <div class="game-header">
+          <div>
+            <p class="eyebrow">Trivia in progress</p>
+            <h2 id="game-title">Question <span id="question-number">1</span></h2>
+          </div>
+          <div class="status-block" aria-live="polite">
+            <p id="progress-text">Question 1 of 10</p>
+            <p id="score-text">Score: 0</p>
+          </div>
+        </div>
+
+        <progress id="quiz-progress" value="1" max="10">1 of 10</progress>
+
+        <form id="quiz-form" novalidate>
+          <fieldset class="question-card" id="question-fieldset">
+            <legend class="visually-hidden">Current trivia question</legend>
+            <h3 id="question-heading" tabindex="-1"></h3>
+            <div id="choices" class="choices" role="radiogroup" aria-labelledby="question-heading"></div>
+          </fieldset>
+
+          <p id="feedback" class="feedback" aria-live="polite"></p>
+
+          <div class="button-row">
+            <button id="submit-answer" class="button button-primary" type="submit" disabled>
+              Check answer
+            </button>
+            <button id="next-question" class="button button-secondary" type="button" hidden>
+              Next question
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section
+        id="results-screen"
+        class="screen panel"
+        aria-labelledby="results-title"
+        hidden
+      >
+        <p class="eyebrow">Thanks for playing</p>
+        <h2 id="results-title">Leaderboard</h2>
+        <p id="final-score" class="lead"></p>
+        <p class="thank-you-note">
+          BLK@OPENLANE thanks you for playing trivia with us! Happy Juneteenth!
+        </p>
+
+        <form id="leaderboard-form" class="leaderboard-form">
+          <label for="player-name">Add your name to the leaderboard</label>
+          <input
+            id="player-name"
+            name="playerName"
+            type="text"
+            maxlength="30"
+            autocomplete="name"
+            required
+          />
+          <div class="button-row">
+            <button class="button button-primary" type="submit">Save score</button>
+            <button id="play-again" class="button button-secondary" type="button">Play again</button>
+          </div>
+        </form>
+
+        <p id="leaderboard-message" class="feedback" aria-live="polite"></p>
+
+        <section aria-labelledby="leaderboard-list-title">
+          <h3 id="leaderboard-list-title">Top scores</h3>
+          <ol id="leaderboard-list" class="leaderboard-list"></ol>
+        </section>
+      </section>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
