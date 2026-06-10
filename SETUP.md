@@ -1,45 +1,50 @@
 # Shared Leaderboard Setup
 
-This site can use a shared Supabase leaderboard without adding a build step.
+This site now uses Firebase Cloud Firestore for the shared leaderboard.
 
-## 1. Create a Supabase project
+## 1. Register the web app
 
-Create a project in Supabase, then copy:
+In Firebase console:
 
-- Project URL
-- Publishable / anon key
+- open the `triviachallenge-382be` project
+- add or open the web app registration
+- copy the web app config if you need to verify [config.js](./config.js)
 
-## 2. Create the table and policies
+## 2. Create the Firestore database
 
-Open the SQL editor in Supabase and run [supabase-setup.sql](./supabase-setup.sql).
+In Firebase console:
 
-This creates:
+- go to `Firestore Database`
+- click `Create database`
+- choose a location
 
-- a `trivia_leaderboard` table
-- a case-insensitive unique name rule so each name can play once
-- row level security policies for public read and public insert
+For quick setup, you can start in test mode while validating the site.
 
-## 3. Add your project config
+## 3. Add Firestore security rules
 
-Edit [config.js](./config.js) and fill in:
+After Firestore is created, open the `Rules` tab and use rules like:
 
-```js
-window.TRIVIA_CONFIG = {
-  backend: {
-    provider: "supabase",
-    supabaseUrl: "https://YOUR-PROJECT.supabase.co",
-    supabasePublishableKey: "YOUR-PUBLISHABLE-KEY",
-    leaderboardTable: "trivia_leaderboard",
-  },
-};
+```txt
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /trivia_leaderboard/{playerId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if false;
+    }
+  }
+}
 ```
+
+These rules allow the public site to read scores and create new entries, while preventing edits or deletes from the browser.
 
 ## 4. Publish the site
 
-Upload the full folder to a static host such as GitHub Pages, Netlify, or Vercel.
+Push the updated files to GitHub Pages as usual.
 
 ## Notes
 
-- If `config.js` is left blank, the site falls back to a device-only local leaderboard.
-- With Supabase configured, leaderboard scores are shared across everyone using the same site.
-- The unique-name rule is enforced in the database, not just in the browser.
+- The leaderboard collection is `trivia_leaderboard`.
+- Each player name is normalized and stored as one Firestore document, so the same name cannot be added twice.
+- If Firestore is not set up yet, the site will show that the shared leaderboard is unavailable.

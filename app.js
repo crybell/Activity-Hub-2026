@@ -85,6 +85,7 @@ const leaderboardKey = "juneteenth-trivia-leaderboard";
 const maxLeaderboardEntries = 10;
 const config = window.TRIVIA_CONFIG || {};
 const backendConfig = config.backend || {};
+let firebaseServicesPromise = null;
 
 const screens = {
   welcome: document.getElementById("welcome-screen"),
@@ -371,6 +372,13 @@ function getLeaderboard() {
 }
 
 async function loadLeaderboard() {
+  if (isFirebaseConfigured()) {
+    const remoteResult = await fetchFirebaseLeaderboard();
+    if (remoteResult.ok) {
+      return remoteResult.data;
+    }
+  }
+
   if (isSupabaseConfigured()) {
     const remoteResult = await fetchSupabaseLeaderboard();
     if (remoteResult.ok) {
@@ -382,6 +390,10 @@ async function loadLeaderboard() {
 }
 
 async function saveScore(entry) {
+  if (isFirebaseConfigured()) {
+    return saveFirebaseScore(entry);
+  }
+
   if (isSupabaseConfigured()) {
     return saveSupabaseScore(entry);
   }
@@ -411,6 +423,79 @@ async function saveScore(entry) {
     ok: true,
     message: "Score saved to the local leaderboard on this device.",
   };
+}
+
+async function fetchFirebaseLeaderboard() {
+  try {
+    const { db, collection, getDocs } = await getFirebaseServices();
+    const snapshot = await getDocs(collection(db, getLeaderboardCollectionName()));
+    const rows = snapshot.docs.map((document) => document.data());
+
+    rows.sort((a, b) => {
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+
+      return (a.created_at || 0) - (b.created_at || 0);
+    });
+
+    return {
+      ok: true,
+      data: rows.slice(0, maxLeaderboardEntries).map((row) => ({
+        name: row.player_name,
+        score: row.score,
+        total: row.total,
+        createdAt: row.created_at,
+      })),
+    };
+  } catch (error) {
+    return { ok: false, data: [] };
+  }
+}
+
+async function saveFirebaseScore(entry) {
+  try {
+    const { db, doc, runTransaction } = await getFirebaseServices();
+    const normalizedName = normalizePlayerName(entry.name);
+    const docRef = doc(
+      db,
+      getLeaderboardCollectionName(),
+      encodeURIComponent(normalizedName),
+    );
+
+    await runTransaction(db, async (transaction) => {
+      const existingEntry = await transaction.get(docRef);
+
+      if (existingEntry.exists()) {
+        throw new Error("duplicate-name");
+      }
+
+      transaction.set(docRef, {
+        player_name: entry.name,
+        player_name_normalized: normalizedName,
+        score: entry.score,
+        total: entry.total,
+        created_at: Date.now(),
+      });
+    });
+
+    return {
+      ok: true,
+      message: "Score saved to the shared leaderboard.",
+    };
+  } catch (error) {
+    if (error instanceof Error && error.message === "duplicate-name") {
+      return {
+        ok: false,
+        message: "That name has already played. Please use a different name.",
+      };
+    }
+
+    return {
+      ok: false,
+      message: "The shared leaderboard is unavailable right now.",
+    };
+  }
 }
 
 async function fetchSupabaseLeaderboard() {
@@ -497,6 +582,16 @@ function isSupabaseConfigured() {
   );
 }
 
+function isFirebaseConfigured() {
+  const firebaseConfig = backendConfig.firebaseConfig || {};
+  return (
+    backendConfig.provider === "firebase" &&
+    Boolean(firebaseConfig.apiKey) &&
+    Boolean(firebaseConfig.projectId) &&
+    Boolean(firebaseConfig.appId)
+  );
+}
+
 function createSupabaseHeaders() {
   return {
     apikey: backendConfig.supabasePublishableKey,
@@ -508,8 +603,43 @@ function getLeaderboardTable() {
   return backendConfig.leaderboardTable || "trivia_leaderboard";
 }
 
+function getLeaderboardCollectionName() {
+  return backendConfig.leaderboardCollection || "trivia_leaderboard";
+}
+
 function stripTrailingSlash(value) {
   return value.replace(/\/+$/, "");
+}
+
+async function getFirebaseServices() {
+  if (!firebaseServicesPromise) {
+    firebaseServicesPromise = loadFirebaseServices();
+  }
+
+  return firebaseServicesPromise;
+}
+
+async function loadFirebaseServices() {
+  const [{ initializeApp }, { getFirestore, collection, getDocs, doc, runTransaction }] =
+    await Promise.all([
+      import("https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js"),
+      import("https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js"),
+    ]);
+
+  const app = initializeApp(backendConfig.firebaseConfig);
+  const db = getFirestore(app);
+
+  return {
+    db,
+    collection,
+    getDocs,
+    doc,
+    runTransaction,
+  };
+}
+
+function normalizePlayerName(value) {
+  return value.trim().toLocaleLowerCase();
 }
 
 function shuffle(items) {
