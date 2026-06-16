@@ -1,15 +1,19 @@
 :root {
-  --bg: #f6f3e9;
-  --panel: #fffdf7;
-  --panel-strong: #fffefb;
-  --text: #171717;
-  --muted: #4f5648;
-  --accent: #234f35;
-  --accent-dark: #173624;
-  --accent-soft: #efe7b8;
-  --ink-soft: #234f35;
-  --border: #d8d1b1;
-  --shadow: 0 18px 45px rgba(23, 23, 23, 0.1);
+  --bg: #f6f0e4;
+  --panel: #fffaf2;
+  --panel-strong: #fffdf8;
+  --text: #151515;
+  --muted: #4f433d;
+  --accent: #0f5a43;
+  --accent-dark: #093d2d;
+  --accent-soft: #f2d760;
+  --ink-soft: #0f5a43;
+  --border: #d9c8ad;
+  --red: #b21e35;
+  --red-soft: #f5d8dd;
+  --green-soft: #d9efe8;
+  --black-soft: #201c1d;
+  --shadow: 0 18px 45px rgba(21, 21, 21, 0.12);
   --radius: 20px;
   --font-heading: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
   --font-body: "Verdana", "Geneva", sans-serif;
@@ -25,9 +29,10 @@ body {
   font-family: var(--font-body);
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(35, 79, 53, 0.12), transparent 32%),
-    radial-gradient(circle at top right, rgba(216, 193, 72, 0.16), transparent 28%),
-    linear-gradient(180deg, #f9f8f1 0%, #efe9d3 100%);
+    radial-gradient(circle at top left, rgba(178, 30, 53, 0.18), transparent 32%),
+    radial-gradient(circle at top right, rgba(15, 90, 67, 0.2), transparent 30%),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.06) 0 12%, transparent 12% 100%),
+    linear-gradient(180deg, #fcf4eb 0%, #efe2cf 100%);
 }
 
 .skip-link {
@@ -52,8 +57,8 @@ body {
 }
 
 .panel {
-  background: rgba(255, 250, 244, 0.96);
-  border: 1px solid rgba(215, 197, 180, 0.92);
+  background: rgba(255, 248, 240, 0.96);
+  border: 1px solid rgba(217, 200, 173, 0.92);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 1.5rem;
@@ -118,6 +123,113 @@ p {
   border-left: 6px solid var(--accent);
   background:
     linear-gradient(135deg, rgba(239, 231, 184, 0.45), rgba(255, 254, 251, 0.96));
+}
+
+.feature-section {
+  margin: 0 0 2rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(251, 244, 233, 0.98));
+}
+
+.feature-copy {
+  margin-bottom: 1.25rem;
+}
+
+.car-strip {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1fr;
+  gap: 0.85rem;
+  margin: 1.5rem 0;
+}
+
+.car-photo {
+  margin: 0;
+  min-height: 13rem;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 14px 28px rgba(23, 23, 23, 0.14);
+  background: #ddd;
+}
+
+.car-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.audience-card {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--panel-strong);
+}
+
+.audience-card h3 {
+  margin-bottom: 0.45rem;
+}
+
+.audience-card p {
+  margin: 0 0 0.55rem;
+}
+
+.audience-summary {
+  color: var(--black-soft);
+  font-size: 1rem;
+  line-height: 1.55;
+  min-height: 4.8rem;
+}
+
+.audience-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.85rem;
+}
+
+.audience-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(15, 90, 67, 0.14);
+  color: var(--accent-dark);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.audience-tag-link {
+  text-decoration: none;
+}
+
+.resource-grid {
+  margin-top: 1.25rem;
+}
+
+.resource-card {
+  min-height: 100%;
+}
+
+.resource-card p {
+  margin: 0 0 0.7rem;
+  color: var(--muted);
+}
+
+.resource-button-static {
+  cursor: default;
+  pointer-events: none;
 }
 
 .game-header {
@@ -364,12 +476,33 @@ input:focus-visible {
     text-align: left;
   }
 
+  .feature-section {
+    padding: 1.1rem;
+  }
+
+  .car-strip,
+  .audience-grid,
+  .resource-grid,
   .activity-grid {
     grid-template-columns: 1fr;
   }
 
+  .car-photo {
+    min-height: 11rem;
+  }
+
+  .audience-summary {
+    min-height: auto;
+  }
+
   .button {
     width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .audience-grid {
+    grid-template-columns: 1fr;
   }
 }
 

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Juneteenth Coloring Pages</title>
+    <style>
+      :root {
+        --cream: #f7f0e3;
+        --panel: #fffaf2;
+        --ink: #1a1a1a;
+        --muted: #5b5148;
+        --border: #d8c7a8;
+        --shadow: 0 18px 40px rgba(26, 26, 26, 0.1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(181, 31, 53, 0.1), transparent 28%),
+          radial-gradient(circle at top right, rgba(15, 90, 67, 0.1), transparent 24%),
+          linear-gradient(180deg, #fcf6ec 0%, #efe3cf 100%);
+      }
+
+      main {
+        width: min(100%, 68rem);
+        margin: 0 auto;
+        padding: 2rem 1rem 3rem;
+      }
+
+      h1 {
+        margin: 0 0 0.75rem;
+        font-size: clamp(2rem, 4vw, 3.2rem);
+      }
+
+      p {
+        margin: 0 0 1rem;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .card {
+        padding: 1rem;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: rgba(255, 250, 242, 0.96);
+        box-shadow: var(--shadow);
+      }
+
+      .preview {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 16px;
+        border: 1px solid rgba(26, 26, 26, 0.08);
+        background: #fff;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 10rem;
+        margin-top: 0.75rem;
+        padding: 0.9rem 1.2rem;
+        border-radius: 999px;
+        background: #f7da61;
+        color: #171717;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      @media (max-width: 860px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        main {
+          padding: 1rem 0.75rem 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Juneteenth Coloring Pages</h1>
+      <p>
+        Three printable coloring pages selected for the activity hub. Open any
+        page in a browser or PDF viewer to print or save it.
+      </p>
+
+      <section class="grid" aria-label="Coloring page previews">
+        <article class="card">
+          <img class="preview" src="Juneteenth Coloring Page Printable for Kids and Adults.jpeg" alt="Preview of Celebrate Freedom Juneteenth coloring page" />
+          <h2>Celebrate Freedom</h2>
+          <a class="button" href="Juneteenth Coloring Page Printable for Kids and Adults.jpeg">Open page 1</a>
+        </article>
+
+        <article class="card">
+          <img class="preview" src="Juneteenth_Hands.png" alt="Preview of Celebrating Juneteenth coloring page with raised hands and hearts" />
+          <h2>Celebrating Juneteenth</h2>
+          <a class="button" href="Juneteenth_Hands.png">Open page 2</a>
+        </article>
+
+        <article class="card">
+          <img class="preview" src="Juneteenth_Girl_Holding_Flag_Coloring_Page.webp" alt="Preview of Juneteenth Freedom Day coloring page with child holding a flag" />
+          <h2>Freedom Day</h2>
+          <a class="button" href="Juneteenth_Girl_Holding_Flag_Coloring_Page.webp">Open page 3</a>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

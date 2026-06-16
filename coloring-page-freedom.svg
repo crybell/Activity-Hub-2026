@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Juneteenth freedom butterfly coloring page">
+  <rect x="18" y="18" width="764" height="964" rx="28" fill="#fff" stroke="#111" stroke-width="4"/>
+
+  <text x="400" y="110" text-anchor="middle" font-size="58" font-family="Avenir Next, Segoe UI, sans-serif" font-weight="800" fill="none" stroke="#111" stroke-width="2">Juneteenth Freedom</text>
+
+  <g transform="translate(400 430)" fill="none" stroke="#111" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M0 -30 C-10 -92 -12 -154 0 -206 C12 -154 10 -92 0 -30"/>
+    <path d="M0 -30 C18 8 20 92 0 194 C-20 92 -18 8 0 -30"/>
+    <path d="M-12 -212 C-44 -252 -74 -272 -88 -258 C-100 -244 -84 -212 -48 -176"/>
+    <path d="M12 -212 C44 -252 74 -272 88 -258 C100 -244 84 -212 48 -176"/>
+
+    <path d="M-14 -52 C-40 -110 -104 -172 -188 -186 C-248 -196 -296 -162 -300 -108 C-304 -42 -244 10 -170 26 C-110 38 -50 8 -14 -52 Z"/>
+    <path d="M14 -52 C40 -110 104 -172 188 -186 C248 -196 296 -162 300 -108 C304 -42 244 10 170 26 C110 38 50 8 14 -52 Z"/>
+
+    <path d="M-18 14 C-54 24 -108 72 -146 142 C-184 214 -166 274 -112 286 C-48 298 10 228 18 158 C24 96 12 46 -18 14 Z"/>
+    <path d="M18 14 C54 24 108 72 146 142 C184 214 166 274 112 286 C48 298 -10 228 -18 158 C-24 96 -12 46 18 14 Z"/>
+
+    <path d="M-94 -156 L-148 -128 L-198 -128"/>
+    <path d="M-82 -116 L-144 -92 L-206 -92"/>
+    <path d="M-72 -76 L-144 -56 L-222 -56"/>
+    <path d="M-52 -22 L-130 4 L-204 18"/>
+    <path d="M94 -156 L148 -128 L198 -128"/>
+    <path d="M82 -116 L144 -92 L206 -92"/>
+    <path d="M72 -76 L144 -56 L222 -56"/>
+    <path d="M52 -22 L130 4 L204 18"/>
+
+    <path d="M-62 58 L-110 112 L-138 182"/>
+    <path d="M-34 74 L-70 140 L-82 214"/>
+    <path d="M34 74 L70 140 L82 214"/>
+    <path d="M62 58 L110 112 L138 182"/>
+  </g>
+
+  <g fill="none" stroke="#111" stroke-width="4" stroke-linecap="round">
+    <path d="M114 720 l22 22 l22 -22 l22 22"/>
+    <path d="M598 720 l22 22 l22 -22 l22 22"/>
+    <circle cx="198" cy="790" r="12"/>
+    <circle cx="602" cy="790" r="12"/>
+    <path d="M282 850 q30 -20 60 0"/>
+    <path d="M458 850 q30 -20 60 0"/>
+  </g>
+
+  <text x="400" y="908" text-anchor="middle" font-size="72" font-family="Avenir Next, Segoe UI, sans-serif" font-weight="800" fill="none" stroke="#111" stroke-width="2.2">FREEDOM</text>
+</svg>
