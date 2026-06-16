@@ -40,6 +40,7 @@
       }
 
       .panel {
+        position: relative;
         background: rgba(255, 250, 241, 0.96);
         border: 1px solid var(--border);
         border-radius: var(--radius);
@@ -120,6 +121,34 @@
         border: 1px solid rgba(242, 215, 96, 0.45);
       }
 
+      .hidden-butterfly {
+        position: absolute;
+        right: 1.1rem;
+        bottom: 1.1rem;
+        width: 2.4rem;
+        height: 2.4rem;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: rgba(31, 79, 150, 0.4);
+        font-size: 1.35rem;
+        cursor: pointer;
+      }
+
+      .hidden-butterfly:hover,
+      .hidden-butterfly:focus-visible {
+        color: var(--blue);
+        outline: none;
+      }
+
+      .joy-note {
+        margin-top: 1rem;
+        padding: 0.9rem 1rem;
+        border-radius: 16px;
+        border: 1px solid rgba(31, 79, 150, 0.18);
+        background: rgba(255, 250, 241, 0.92);
+      }
+
       @media (max-width: 720px) {
         .notes {
           grid-template-columns: 1fr;
@@ -198,7 +227,29 @@
             Galveston, Texas.
           </p>
         </div>
+
+        <button
+          id="hidden-butterfly"
+          class="hidden-butterfly"
+          type="button"
+          aria-label="Hidden butterfly"
+        >
+          🦋
+        </button>
+
+        <div id="joy-note" class="joy-note" hidden>
+          <p>Joy Note: Be bold, and do good in the world! Happy Juneteenth!</p>
+        </div>
       </section>
     </main>
+    <script>
+      const butterflyButton = document.getElementById("hidden-butterfly");
+      const joyNote = document.getElementById("joy-note");
+
+      butterflyButton.addEventListener("click", () => {
+        joyNote.hidden = false;
+        butterflyButton.hidden = true;
+      });
+    </script>
   </body>
 </html>

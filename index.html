@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Juneteenth Activity Hub</title>
-    <link rel="stylesheet" href="styles.css?v=20260616b" />
+    <link rel="stylesheet" href="styles.css?v=20260616e" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -17,6 +17,9 @@
           Explore stories, test your knowledge, and celebrate the history,
           culture, and achievements that make Juneteenth meaningful.
         </p>
+        <div id="june19-banner" class="june19-banner" hidden>
+          <p class="june19-banner-copy">Happy Juneteenth! Today we celebrate freedom, joy, and community.</p>
+        </div>
 
         <section class="info-card did-you-know" aria-labelledby="did-you-know-title">
           <h2 id="did-you-know-title">Did you know?</h2>
@@ -304,6 +307,14 @@
         <p class="eyebrow">Thanks for playing</p>
         <h2 id="results-title">Leaderboard</h2>
         <p id="final-score" class="lead"></p>
+        <div id="perfect-score-bonus" class="perfect-score-bonus" hidden>
+          <div class="ice-cream-icon" aria-hidden="true">
+            <span class="ice-cream-scoop scoop-one"></span>
+            <span class="ice-cream-scoop scoop-two"></span>
+            <span class="ice-cream-cone"></span>
+          </div>
+          <p class="perfect-score-copy">Perfect score! Winner gets a virtual ice cream cone.</p>
+        </div>
         <p class="thank-you-note">
           BLK@OPENLANE thanks you for playing trivia with us! Happy Juneteenth!
         </p>
@@ -325,9 +336,13 @@
           />
           <div class="button-row">
             <button class="button button-primary" type="submit">Save score</button>
-            <button id="play-again" class="button button-secondary" type="button">Play again</button>
           </div>
         </form>
+
+        <div class="button-row results-actions">
+          <button id="play-again" class="button button-secondary" type="button">Play again</button>
+          <button id="back-to-hub" class="button button-secondary" type="button">Back to Activity Hub</button>
+        </div>
 
         <p id="leaderboard-message" class="feedback" aria-live="polite"></p>
 

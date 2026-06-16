@@ -105,11 +105,14 @@ const feedback = document.getElementById("feedback");
 const submitButton = document.getElementById("submit-answer");
 const nextButton = document.getElementById("next-question");
 const finalScore = document.getElementById("final-score");
+const perfectScoreBonus = document.getElementById("perfect-score-bonus");
+const june19Banner = document.getElementById("june19-banner");
 const leaderboardForm = document.getElementById("leaderboard-form");
 const playerNameInput = document.getElementById("player-name");
 const leaderboardMessage = document.getElementById("leaderboard-message");
 const leaderboardList = document.getElementById("leaderboard-list");
 const playAgainButton = document.getElementById("play-again");
+const backToHubButton = document.getElementById("back-to-hub");
 
 const state = {
   currentIndex: 0,
@@ -126,10 +129,12 @@ quizForm.addEventListener("submit", handleSubmit);
 nextButton.addEventListener("click", goToNextQuestion);
 leaderboardForm.addEventListener("submit", saveLeaderboardEntry);
 playAgainButton.addEventListener("click", resetGame);
+backToHubButton.addEventListener("click", returnToHub);
 
 initializeApp();
 
 async function initializeApp() {
+  updateJune19Banner();
   state.leaderboard = await loadLeaderboard();
   renderLeaderboard();
 }
@@ -243,14 +248,21 @@ function renderResults() {
   showScreen("results");
 
   const percent = Math.round((state.score / questions.length) * 100);
+  const isPerfectScore = state.score === questions.length;
   finalScore.textContent = `You scored ${state.score} out of ${questions.length} (${percent}%).`;
+  perfectScoreBonus.hidden = !isPerfectScore;
+  screens.results.classList.toggle("perfect-score-active", isPerfectScore);
   leaderboardMessage.textContent = "";
   leaderboardMessage.dataset.tone = "";
   leaderboardForm.hidden = state.savedScore;
   playerNameInput.value = "";
   playerNameInput.disabled = false;
   renderLeaderboard();
-  playerNameInput.focus();
+  if (!state.savedScore) {
+    playerNameInput.focus();
+  } else {
+    playAgainButton.focus();
+  }
 }
 
 async function saveLeaderboardEntry(event) {
@@ -298,12 +310,42 @@ async function saveLeaderboardEntry(event) {
 }
 
 function resetGame() {
+  resetTriviaState();
   showScreen("welcome");
+  startButton.focus();
+}
+
+function returnToHub() {
+  resetTriviaState();
+  showScreen("welcome");
+  startButton.focus();
+}
+
+function resetTriviaState() {
+  state.currentIndex = 0;
+  state.score = 0;
+  state.submitted = false;
+  state.choices = [];
+  state.savedScore = false;
+  screens.results.classList.remove("perfect-score-active");
+  perfectScoreBonus.hidden = true;
+  finalScore.textContent = "";
   feedback.textContent = "";
   feedback.dataset.tone = "";
   leaderboardMessage.textContent = "";
   leaderboardMessage.dataset.tone = "";
-  startButton.focus();
+  leaderboardForm.hidden = false;
+  playerNameInput.value = "";
+  playerNameInput.disabled = false;
+  submitButton.disabled = true;
+  nextButton.hidden = true;
+  renderLeaderboard();
+}
+
+function updateJune19Banner() {
+  const today = new Date();
+  const isJune19 = today.getMonth() === 5 && today.getDate() === 19;
+  june19Banner.hidden = !isJune19;
 }
 
 function showScreen(screenName) {
