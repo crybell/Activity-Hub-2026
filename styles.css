@@ -56,6 +56,15 @@ body {
   padding: 2rem 1rem 3rem;
 }
 
+.site-credit {
+  width: min(100%, 52rem);
+  margin: -1.5rem auto 2rem;
+  padding: 0 1rem;
+  color: rgba(79, 67, 61, 0.82);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
 .panel {
   background: rgba(255, 248, 240, 0.96);
   border: 1px solid rgba(217, 200, 173, 0.92);
