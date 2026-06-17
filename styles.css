@@ -547,6 +547,12 @@ input:focus-visible {
   background: #fff;
 }
 
+.field-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
 .leaderboard-list {
   padding-left: 1.3rem;
   margin: 1rem 0 0;

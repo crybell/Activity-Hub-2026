@@ -86,6 +86,12 @@ const maxLeaderboardEntries = 10;
 const config = window.TRIVIA_CONFIG || {};
 const backendConfig = config.backend || {};
 let firebaseServicesPromise = null;
+const {
+  getDisplayLeaderboardName,
+  normalizePlayerName,
+  parsePlayerName,
+  resolveLeaderboardName,
+} = window.LeaderboardNameUtils;
 
 const screens = {
   welcome: document.getElementById("welcome-screen"),
@@ -268,28 +274,29 @@ function renderResults() {
 async function saveLeaderboardEntry(event) {
   event.preventDefault();
 
-  const name = playerNameInput.value.trim();
+  const playerNameParts = parsePlayerName(playerNameInput.value);
 
-  if (!name) {
-    setLeaderboardMessage("Enter a name before saving your score.", "warning");
+  if (!playerNameParts) {
+    setLeaderboardMessage("Enter a first and last name, like Maya Angelou.", "warning");
     return;
   }
 
-  const leaderboard = state.leaderboard;
-  const nameTaken = leaderboard.some(
-    (entry) => entry.name.toLocaleLowerCase() === name.toLocaleLowerCase(),
-  );
+  const formattedName = resolveLeaderboardName(playerNameParts, state.leaderboard);
 
-  if (nameTaken) {
-    setLeaderboardMessage("That name has already played on this device. Please use a different name.", "warning");
+  if (!formattedName) {
+    setLeaderboardMessage(
+      "Too many similar names are already on the leaderboard. Try a nickname or a different first name.",
+      "warning",
+    );
     return;
   }
 
+  playerNameInput.value = formattedName;
   playerNameInput.disabled = true;
   setLeaderboardMessage("Saving score...", "success");
 
   const saveResult = await saveScore({
-    name,
+    name: formattedName,
     score: state.score,
     total: questions.length,
   });
@@ -393,7 +400,7 @@ function renderLeaderboard() {
     wrapper.className = "leaderboard-entry";
 
     const name = document.createElement("strong");
-    name.textContent = entry.name;
+    name.textContent = getDisplayLeaderboardName(entry.name);
 
     const score = document.createElement("span");
     score.textContent = `${entry.score}/${entry.total}`;
@@ -678,10 +685,6 @@ async function loadFirebaseServices() {
     doc,
     runTransaction,
   };
-}
-
-function normalizePlayerName(value) {
-  return value.trim().toLocaleLowerCase();
 }
 
 function shuffle(items) {

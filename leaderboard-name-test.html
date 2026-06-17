@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leaderboard Name Tester</title>
+    <link rel="stylesheet" href="styles.css?v=20260617a" />
+    <style>
+      .tester-shell {
+        width: min(100%, 58rem);
+        margin: 0 auto;
+        padding: 2rem 1rem 3rem;
+      }
+
+      .tester-grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .tester-actions,
+      .tester-form {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        align-items: end;
+      }
+
+      .tester-form label {
+        flex: 1 1 18rem;
+      }
+
+      .tester-form input {
+        width: 100%;
+        margin-top: 0.4rem;
+      }
+
+      .tester-results,
+      .tester-board {
+        margin: 0;
+        padding-left: 1.25rem;
+      }
+
+      .tester-results li,
+      .tester-board li {
+        margin-bottom: 0.65rem;
+      }
+
+      .tester-status {
+        display: inline-block;
+        min-width: 4.5rem;
+        margin-right: 0.6rem;
+        font-weight: 700;
+      }
+
+      .tester-status[data-tone="success"] {
+        color: var(--accent-dark);
+      }
+
+      .tester-status[data-tone="warning"] {
+        color: var(--red);
+      }
+
+      .tester-code {
+        font-family: ui-monospace, "SFMono-Regular", "SF Mono", Consolas, monospace;
+        font-size: 0.95rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="tester-shell">
+      <section class="panel tester-grid" aria-labelledby="tester-title">
+        <div>
+          <p class="eyebrow">Dev Tool</p>
+          <h1 id="tester-title">Leaderboard Name Tester</h1>
+          <p class="lead">
+            This page uses the same masking logic as the trivia leaderboard, but keeps all testing local to this browser tab.
+          </p>
+        </div>
+
+        <div class="tester-actions">
+          <button id="run-suite" class="button button-primary" type="button">Run sample scenarios</button>
+          <button id="reset-board" class="button button-secondary" type="button">Reset test board</button>
+        </div>
+
+        <form id="custom-test-form" class="tester-form">
+          <label for="custom-name">
+            Try a custom name
+            <input
+              id="custom-name"
+              name="customName"
+              type="text"
+              placeholder="John Williams"
+              autocomplete="off"
+              required
+            />
+          </label>
+          <button class="button button-secondary" type="submit">Add test entry</button>
+        </form>
+
+        <section aria-labelledby="scenario-results-title">
+          <h2 id="scenario-results-title">Scenario Results</h2>
+          <ol id="scenario-results" class="tester-results"></ol>
+        </section>
+
+        <section aria-labelledby="leaderboard-preview-title">
+          <h2 id="leaderboard-preview-title">Simulated Leaderboard</h2>
+          <ol id="leaderboard-preview" class="tester-board"></ol>
+        </section>
+      </section>
+    </main>
+
+    <script src="leaderboard-name-utils.js"></script>
+    <script>
+      const {
+        getDisplayLeaderboardName,
+        parsePlayerName,
+        resolveLeaderboardName,
+      } = window.LeaderboardNameUtils;
+
+      const sampleScenarios = [
+        { input: "Maya Angelou", expected: "Maya A." },
+        { input: "Prince", expected: "" },
+        { input: "John Williams", expected: "John W." },
+        { input: "John Williams", expected: "John Wi." },
+        { input: "John Walker", expected: "John Wa." },
+        { input: "  joHN   wiLLiams  ", expected: "John Wil." },
+        { input: "Mary-Kate O'Neil", expected: "Mary-Kate O." },
+        { input: "John Williams", expected: "John Will." },
+        { input: "John Williams", expected: "John Willi." },
+        { input: "John Williams", expected: "John Willia." },
+        { input: "John Williams", expected: "John William." },
+        { input: "John Williams", expected: "" },
+      ];
+
+      const runSuiteButton = document.getElementById("run-suite");
+      const resetBoardButton = document.getElementById("reset-board");
+      const customTestForm = document.getElementById("custom-test-form");
+      const customNameInput = document.getElementById("custom-name");
+      const scenarioResults = document.getElementById("scenario-results");
+      const leaderboardPreview = document.getElementById("leaderboard-preview");
+      let simulatedLeaderboard = [];
+
+      runSuiteButton.addEventListener("click", runSampleSuite);
+      resetBoardButton.addEventListener("click", resetBoard);
+      customTestForm.addEventListener("submit", handleCustomTest);
+
+      resetBoard();
+
+      function runSampleSuite() {
+        resetBoard();
+
+        sampleScenarios.forEach((scenario, index) => {
+          const actual = tryName(scenario.input);
+          const passed = actual === scenario.expected;
+          appendResult({
+            input: scenario.input,
+            expected: scenario.expected,
+            actual,
+            passed,
+            index,
+          });
+        });
+      }
+
+      function handleCustomTest(event) {
+        event.preventDefault();
+
+        const input = customNameInput.value;
+        const actual = tryName(input);
+
+        appendResult({
+          input,
+          expected: "(manual)",
+          actual,
+          passed: true,
+        });
+
+        customNameInput.value = "";
+        customNameInput.focus();
+      }
+
+      function tryName(input) {
+        const parts = parsePlayerName(input);
+
+        if (!parts) {
+          renderBoard();
+          return "";
+        }
+
+        const resolvedName = resolveLeaderboardName(parts, simulatedLeaderboard);
+
+        if (resolvedName) {
+          simulatedLeaderboard.push({ name: resolvedName });
+        }
+
+        renderBoard();
+        return resolvedName;
+      }
+
+      function resetBoard() {
+        simulatedLeaderboard = [];
+        scenarioResults.innerHTML = "";
+        renderBoard();
+        customNameInput.focus();
+      }
+
+      function renderBoard() {
+        leaderboardPreview.innerHTML = "";
+
+        if (!simulatedLeaderboard.length) {
+          const item = document.createElement("li");
+          item.textContent = "No test entries yet.";
+          leaderboardPreview.appendChild(item);
+          return;
+        }
+
+        simulatedLeaderboard.forEach((entry) => {
+          const item = document.createElement("li");
+          item.className = "tester-code";
+          item.textContent = getDisplayLeaderboardName(entry.name);
+          leaderboardPreview.appendChild(item);
+        });
+      }
+
+      function appendResult({ input, expected, actual, passed, index }) {
+        const item = document.createElement("li");
+        const status = document.createElement("span");
+        const details = document.createElement("span");
+        const inputLabel = typeof index === "number" ? `#${index + 1}` : "Manual";
+        const safeActual = actual || "(rejected)";
+        const safeExpected = expected || "(rejected)";
+
+        status.className = "tester-status";
+        status.dataset.tone = passed ? "success" : "warning";
+        status.textContent = passed ? "PASS" : "FAIL";
+
+        details.className = "tester-code";
+        details.textContent =
+          `${inputLabel} | input: "${input}" | expected: ${safeExpected} | actual: ${safeActual}`;
+
+        item.append(status, details);
+        scenarioResults.appendChild(item);
+      }
+    </script>
+  </body>
+</html>
